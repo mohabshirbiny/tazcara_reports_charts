@@ -256,6 +256,39 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">مبيعات الشباك</h3>
+
+                        </div>
+                        <div class="card-body">
+                          <div class="chart">
+                            <div id="OfflineSales"  ></div>
+                          </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">اجمالی مستحقات مبیعات الاونلاین عن فترة</h3>
+
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                              <div id="OnlineSales" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 732px;" width="732" height="250" class="chartjs-render-monitor"></div>
+                            </div>
+
+                        </div>
+                          <!-- /.card-body -->
+                        </div>
+                </div>
+            </div>
+
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -348,18 +381,29 @@
                 /************************** اعلى المحطات مبيعا اونلاين ****************************/
 
 
-
+                // اعلى10محطاتمبيعا اونلاين
                 loadBestSellerStationOnline();
 
+                // اعلى 10 محطات مبيعا اوفلاين
                 loadBestSellerStationOffline();
 
+                // أعلى 10 شركات لعدد الرحلات
                 loadtopOrganizationsTrips();
 
+                //أعلى 10 شركات لعدد المحطات
                 loadtopOrganizationsStations();
 
+                //فئات التذاكر الاعلى مبيعا
                 loadBestSellerTicketTypes();
 
+                // قنوات حجز التذاكر
                 loadticketsReservationMethods();
+
+                // اجمالی مستحقات مبیعات الاونلاین عن فترة
+                loadOnlineSales();
+
+                //مبيعات الشباك
+                loadOfflineSales();
             })
 
             function loadBestSellerStationOnline() {
@@ -784,6 +828,146 @@
                         };
 
                 var chart1 = new ApexCharts(document.querySelector("#ticketsReservationMethods"), options);
+
+                chart1.render();
+            }
+
+            function loadOfflineSales() {
+
+                var OfflineSales = $.parseJSON($.ajax({
+                    url:  '{{route('OfflineSales')}}',
+                    dataType: "json",
+                    async: false
+                }).responseText);
+
+                var organization = [];
+                var totals = [];
+
+                OfflineSales.forEach(function (x) {
+                    organization.push(x.name);
+                    totals.push(x.total);
+                });
+
+                var options = {
+                            series: [{
+                                name:'الاجمالي بالجنيه',
+                                data: totals
+                            }],
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 15,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                type: 'category',
+                                categories: organization,
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    // show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '14px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            }
+                        };
+
+                var chart1 = new ApexCharts(document.querySelector("#OfflineSales"), options);
+
+                chart1.render();
+            }
+
+            function loadOnlineSales() {
+
+                var OnlineSales = $.parseJSON($.ajax({
+                    url:  '{{route('OnlineSales')}}',
+                    dataType: "json",
+                    async: false
+                }).responseText);
+
+                var organization = [];
+                var totals = [];
+
+                OnlineSales.forEach(function (x) {
+                    organization.push(x.name);
+                    totals.push(x.total);
+                });
+
+                var options = {
+                            series: [{
+                                name:'الاجمالي بالجنيه',
+                                data: totals
+                            }],
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 15,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                type: 'category',
+                                categories: organization,
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    // show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '14px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            }
+                        };
+
+                var chart1 = new ApexCharts(document.querySelector("#OnlineSales"), options);
 
                 chart1.render();
             }

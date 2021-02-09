@@ -151,3 +151,39 @@ Route::get('/tickets-reservation-methods', function () {
     return response()->json($tics);
 
 })->name('ticketsReservationMethods');
+
+Route::get('/get-online-sales', function () {
+
+    $tics = DB::table('tickets_archive')
+
+                ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
+                ->where('bookingMethod','Online')
+                // ->where('tickets_archive.organization_id',26)
+                ->whereNotNull('access_id')
+                ->select('organizations.name',DB::raw('sum(totalamount) as total'))
+                ->groupBy('tickets_archive.organization_id')
+                ->orderBy('total','desc')
+                ->get()
+                ->take(10);
+
+    return response()->json($tics);
+
+})->name('OnlineSales');
+
+Route::get('/get-offline-sales', function () {
+
+    $tics = DB::table('tickets_archive')
+
+                ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
+                ->where('bookingMethod','Offline')
+                // ->where('tickets_archive.organization_id',26)
+                ->whereNull('access_id')
+                ->select('organizations.name',DB::raw('sum(totalamount) as total'))
+                ->groupBy('tickets_archive.organization_id')
+                ->orderBy('total','desc')
+                ->get()
+                ->take(10);
+
+    return response()->json($tics);
+
+})->name('OfflineSales');
