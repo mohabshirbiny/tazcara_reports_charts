@@ -77,7 +77,7 @@
 
                         </div>
                         <div class="card-body">
-                            <form >
+                            <form id="search-form" >
                                 <div class="row">
                                   <div class="col">
                                     <label for="">اسم الشركة</label>
@@ -93,7 +93,7 @@
                                 <div class="row">
                                     <div class="col" style="text-align: center;">
                                         <select  class="form-control select2" name="organization_id" id="">
-                                            <option value="0">--- اختر الشركة ---</option>
+                                            <option value="">--- اختر الشركة ---</option>
                                             @foreach ($organizations as $organization)
                                             <option value="{{$organization->id}}">{{$organization->name}}</option>
                                             @endforeach
@@ -132,8 +132,8 @@
 
                         </div>
                         <div class="card-body">
-                          <div class="chart">
-                            <canvas id="internetTickets" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 732px;" width="732" height="250" class="chartjs-render-monitor"></canvas>
+                          <div id="chart-internetTickets" class='chart'>
+                            <div id="internetTickets" ></div>
                           </div>
 
                         </div>
@@ -147,8 +147,8 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="chart">
-                              <canvas id="compLinesOnlineVsOffline" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 732px;" width="732" height="250" class="chartjs-render-monitor"></canvas>
+                            <div id="chart-compLinesOnlineVsOffline" class='chart'>
+                              <div id="compLinesOnlineVsOffline" ></div>
                             </div>
 
                         </div>
@@ -165,7 +165,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div class="chart">
+                          <div id="chart-bestSellerStationOnline"class='chart'>
                             <div id="bestSellerStationOnline"  ></div>
                           </div>
 
@@ -180,8 +180,8 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="chart">
-                              <div id="bestSellerStationOffline" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 732px;" width="732" height="250" class="chartjs-render-monitor"></div>
+                            <div id="chart-bestSellerStationOffline"class='chart'>
+                              <div id="bestSellerStationOffline" ></div>
                             </div>
 
                         </div>
@@ -198,7 +198,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div class="chart">
+                          <div id="chart-topOrganizationsTrips"class='chart'>
                             <div id="topOrganizationsTrips"  ></div>
                           </div>
 
@@ -213,8 +213,8 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="chart">
-                              <div id="topOrganizationsStations" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 732px;" width="732" height="250" class="chartjs-render-monitor"></div>
+                            <div id="chart-topOrganizationsStations"class='chart'>
+                              <div id="topOrganizationsStations" ></div>
                             </div>
 
                         </div>
@@ -231,7 +231,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div class="chart">
+                          <div id="chart-BestSellerTicketTypes"class='chart'>
                             <div id="BestSellerTicketTypes"  ></div>
                           </div>
 
@@ -246,8 +246,8 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="chart">
-                              <div id="ticketsReservationMethods" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 732px;" width="732" height="250" class="chartjs-render-monitor"></div>
+                            <div id="chart-ticketsReservationMethods"class='chart'>
+                              <div id="ticketsReservationMethods" ></div>
                             </div>
 
                         </div>
@@ -264,7 +264,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div class="chart">
+                          <div id="chart-OfflineSales"class='chart'>
                             <div id="OfflineSales"  ></div>
                           </div>
 
@@ -279,8 +279,74 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="chart">
-                              <div id="OnlineSales" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 732px;" width="732" height="250" class="chartjs-render-monitor"></div>
+                            <div id="chart-OnlineSales"class='chart'>
+                              <div id="OnlineSales" ></div>
+                            </div>
+
+                        </div>
+                          <!-- /.card-body -->
+                        </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title"> أعلى 10 خطوط مبيعا اونلاين </h3>
+
+                        </div>
+                        <div class="card-body">
+                          <div id="chart-topDestinationSalesOnline"class='chart'>
+                            <div id="topDestinationSalesOnline"  ></div>
+                          </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"> أعلى 10 خطوط مبيعا اوفلاين </h3>
+
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-topDestinationSalesOffline"class='chart'>
+                              <div id="topDestinationSalesOffline" ></div>
+                            </div>
+
+                        </div>
+                          <!-- /.card-body -->
+                        </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    {{-- <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title"> xxxxxأعلى 10 خطوط مبيعا اونلاين </h3>
+
+                        </div>
+                        <div class="card-body">
+                          <div id="chart-topDestixnationSalesOnline"class='chart'>
+                            <div id="topDestinatixonSalesOnline"  ></div>
+                          </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                      </div> --}}
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"> أرصدة كروت الشحن المحصلة </h3>
+
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-collectedBalance"class='chart'>
+                              <div id="collectedBalance" ></div>
                             </div>
 
                         </div>
@@ -301,132 +367,134 @@
 
                 $('.select2').select2();
 
-                /**************************** تذاکر الانترنت ***********************************/
-                var getInternetTickets = $.parseJSON($.ajax({
+                loadAllCharts();
+
+            })
+
+            $("form").on("submit", function(event){
+                event.preventDefault();
+
+                var searchParamters = $('form').serialize();
+
+                // clear all charts to rebulid them
+                $('.chart').empty();
+
+                // load charts again
+                loadAllCharts(searchParamters);
+            });
+
+            function loadAllCharts(searchParamters) {
+
+                // Online Vs. Offline خطوط شرکات النقل
+                loadcompLinesOnlineVsOffline(searchParamters);
+
+                // اعلى 10 محطات مبيعا اونلاين
+                loadBestSellerStationOnline(searchParamters);
+
+                // تذاكر الانترنت
+                loadInternetTickets(searchParamters);
+
+                // اعلى 10 محطات مبيعا اوفلاين
+                loadBestSellerStationOffline(searchParamters);
+
+                // أعلى 10 شركات لعدد الرحلات
+                loadtopOrganizationsTrips(searchParamters);
+
+                //أعلى 10 شركات لعدد المحطات
+                loadtopOrganizationsStations(searchParamters);
+
+                //فئات التذاكر الاعلى مبيعا
+                loadBestSellerTicketTypes(searchParamters);
+
+                // قنوات حجز التذاكر
+                loadticketsReservationMethods(searchParamters);
+
+                // اجمالی مستحقات مبیعات الاونلاین عن فترة
+                loadOnlineSales(searchParamters);
+
+                //مبيعات الشباك
+                loadOfflineSales(searchParamters);
+
+                loadtopDestinationSalesOnline(searchParamters);
+
+                loadtopDestinationSalesOffline(searchParamters);
+
+                // أرصدة كروت الشحن المحصلة
+                loadcollectedBalance(searchParamters);
+            }
+
+            function loadInternetTickets(searchParamters )  {
+
+                var BestSellerOnlineStations = $.parseJSON($.ajax({
                     url:  '{{route('getInternetTickets')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
-                var bookedTotal,cancelledTotal = 0;
+                var types = [];
+                var totals = [];
 
-                for (const [key, value] of Object.entries(getInternetTickets)) {
-                    switch(value.type) {
-                        case 'booked':
-                            bookedTotal = value.total;
-                        break;
-                        case 'cancelled':
-                            cancelledTotal = value.total;
-                        break;
-                        default:
-                    }
-
-                }
-
-                var ctx = document.getElementById('internetTickets').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['تم الدفع', 'لم يتم الدفع'],
-                        datasets: [{
-                            label: 'تذاكر الانترنت',
-                            backgroundColor: ['rgb(251, 174, 23)','rgb(255, 0, 0)'],
-                            data: [bookedTotal, cancelledTotal]
-                        }],
-
-                    },
-                    options: {
-                        title: {
-                            display: true,
-                            text: 'تذاكر الانترنت'
-                        }
-                    }
+                BestSellerOnlineStations.forEach(function (x) {
+                    types.push(x.type);
+                    totals.push(x.total);
                 });
 
-                /************************** خطوط شرکات النقل ***********************************/
-
-                var ctx = document.getElementById('compLinesOnlineVsOffline').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: ['شرق الدلتا',
-                        ' سوبر جيت'],
-                        datasets: [{
-                            label: 'اونلاين',
-                            backgroundColor: 'red',
-                            data: [ cancelledTotal,45]
-                        },{
-                            label: 'اوفلاين',
-                            backgroundColor: 'blue',
-                            data: [bookedTotal,65]
-                        }],
-
+                var options = {
+                    series: totals,
+                    chart: {
+                    width: 380,
+                    type: 'pie',
                     },
+                    labels: types,
+                    responsive: [{
+                    breakpoint: 480,
                     options: {
-                        title: {
-                            display: true,
-                            text: 'تذاكر الانترنت',
-                            rtl: true
+                        chart: {
+                        width: 200
                         },
                         legend: {
-                            reverse:true,
-                            textDirection: "rtl"
-                        },
-                        tooltips: {
-                            rtl: true
+                        position: 'bottom'
                         }
                     }
-                });
+                    }]
+                    };
 
-                /************************** اعلى المحطات مبيعا اونلاين ****************************/
+                    createChartElementIfNotExist('internetTickets');
 
+                var chart = new ApexCharts(document.querySelector("#internetTickets"), options);
 
-                // اعلى10محطاتمبيعا اونلاين
-                loadBestSellerStationOnline();
+                chart.render();
+            }
 
-                // اعلى 10 محطات مبيعا اوفلاين
-                loadBestSellerStationOffline();
+            function loadcompLinesOnlineVsOffline(searchParamters) {
 
-                // أعلى 10 شركات لعدد الرحلات
-                loadtopOrganizationsTrips();
-
-                //أعلى 10 شركات لعدد المحطات
-                loadtopOrganizationsStations();
-
-                //فئات التذاكر الاعلى مبيعا
-                loadBestSellerTicketTypes();
-
-                // قنوات حجز التذاكر
-                loadticketsReservationMethods();
-
-                // اجمالی مستحقات مبیعات الاونلاین عن فترة
-                loadOnlineSales();
-
-                //مبيعات الشباك
-                loadOfflineSales();
-            })
-
-            function loadBestSellerStationOnline() {
-
-                var BestSellerOnlineStations = $.parseJSON($.ajax({
-                    url:  '{{route('stationBestSeller','Online')}}',
+                var compLinesOnlineVsOffline = $.parseJSON($.ajax({
+                    url:  '{{route('compLinesOnlineVsOffline')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
                 var stations = [];
-                var tickets = [];
+                var onlineTickets = [];
+                var offlineTickets = [];
 
-                BestSellerOnlineStations.forEach(function (x) {
-                    stations.push(x.name);
-                    tickets.push(x.total);
+                compLinesOnlineVsOffline.forEach(function (x,y) {
+
+                    stations.push(Object.keys(x)[0]);
+                    offlineTickets.push(Object.values(x)[0].Offline);
+                    onlineTickets.push(Object.values(x)[0].Online);
                 });
 
                 var options = {
 
                             series: [{
-                                name:'عدد التذاكر',
-                                data: tickets,
+                                name:'اونلاين',
+                                data: onlineTickets,
+                            },{
+                                name:'اوفلاين',
+                                data: offlineTickets,
                             }],
 
                             chart: {
@@ -436,7 +504,7 @@
 
                             plotOptions: {
                                 bar: {
-                                    borderRadius: 45,
+                                    // borderRadius: 45,
                                     horizontal: true,
                                 }
                             },
@@ -473,16 +541,94 @@
 
                         };
 
+                createChartElementIfNotExist('compLinesOnlineVsOffline');
+
+                var chart = new ApexCharts(document.querySelector("#compLinesOnlineVsOffline"), options);
+
+                chart.render();
+            }
+
+            function loadBestSellerStationOnline(searchParamters) {
+
+                var BestSellerOnlineStations = $.parseJSON($.ajax({
+                    url:  '{{route('stationBestSeller','Online')}}',
+                    dataType: "json",
+                    data: searchParamters,
+                    async: false
+                }).responseText);
+
+                var stations = [];
+                var tickets = [];
+
+                BestSellerOnlineStations.forEach(function (x) {
+                    stations.push(x.name);
+                    tickets.push(x.total);
+                });
+
+                var options = {
+
+                            series: [{
+                                name:'عدد التذاكر',
+                                data: tickets,
+                            }],
+
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    // borderRadius: 45,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                categories: stations,
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '15px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            },
+
+                        };
+
+                createChartElementIfNotExist('bestSellerStationOnline');
+
                 var chart = new ApexCharts(document.querySelector("#bestSellerStationOnline"), options);
 
                 chart.render();
             }
 
-            function loadBestSellerStationOffline() {
+            function loadBestSellerStationOffline(searchParamters) {
 
                 var BestSellerOfflineStations = $.parseJSON($.ajax({
                     url:  '{{route('stationBestSeller','Offline')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
@@ -543,18 +689,20 @@
 
                                 },
                             }
-                        };
+                };
 
+                createChartElementIfNotExist('bestSellerStationOffline');
                 var chart1 = new ApexCharts(document.querySelector("#bestSellerStationOffline"), options);
 
                 chart1.render();
             }
 
-            function loadtopOrganizationsTrips() {
+            function loadtopOrganizationsTrips(searchParamters) {
 
                 var BestSellerOfflineStations = $.parseJSON($.ajax({
                     url:  '{{route('topOrganizationsTrips')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
@@ -617,16 +765,19 @@
                             }
                         };
 
+                        createChartElementIfNotExist('topOrganizationsTrips');
+
                 var chart1 = new ApexCharts(document.querySelector("#topOrganizationsTrips"), options);
 
                 chart1.render();
             }
 
-            function loadtopOrganizationsStations() {
+            function loadtopOrganizationsStations(searchParamters) {
 
                 var topOrganizationsStations = $.parseJSON($.ajax({
                     url:  '{{route('topOrganizationsStations')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
@@ -687,16 +838,19 @@
                             }
                         };
 
+                        createChartElementIfNotExist('topOrganizationsStations');
+
                 var chart1 = new ApexCharts(document.querySelector("#topOrganizationsStations"), options);
 
                 chart1.render();
             }
 
-            function loadBestSellerTicketTypes() {
+            function loadBestSellerTicketTypes(searchParamters) {
 
                 var BestSellerTicketTypes = $.parseJSON($.ajax({
                     url:  '{{route('BestSellerTicketTypes')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
@@ -757,16 +911,19 @@
                             }
                         };
 
+                        createChartElementIfNotExist('BestSellerTicketTypes');
+
                 var chart1 = new ApexCharts(document.querySelector("#BestSellerTicketTypes"), options);
 
                 chart1.render();
             }
 
-            function loadticketsReservationMethods() {
+            function loadticketsReservationMethods(searchParamters) {
 
                 var ticketsReservationMethods = $.parseJSON($.ajax({
                     url:  '{{route('ticketsReservationMethods')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
@@ -826,17 +983,19 @@
                                 },
                             }
                         };
+                createChartElementIfNotExist('ticketsReservationMethods');
 
                 var chart1 = new ApexCharts(document.querySelector("#ticketsReservationMethods"), options);
 
                 chart1.render();
             }
 
-            function loadOfflineSales() {
+            function loadOfflineSales(searchParamters) {
 
                 var OfflineSales = $.parseJSON($.ajax({
                     url:  '{{route('OfflineSales')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
@@ -897,16 +1056,18 @@
                             }
                         };
 
+                        createChartElementIfNotExist('OfflineSales');
                 var chart1 = new ApexCharts(document.querySelector("#OfflineSales"), options);
 
                 chart1.render();
             }
 
-            function loadOnlineSales() {
+            function loadOnlineSales(searchParamters) {
 
                 var OnlineSales = $.parseJSON($.ajax({
                     url:  '{{route('OnlineSales')}}',
                     dataType: "json",
+                    data: searchParamters,
                     async: false
                 }).responseText);
 
@@ -967,9 +1128,245 @@
                             }
                         };
 
+                createChartElementIfNotExist('OnlineSales');
+
                 var chart1 = new ApexCharts(document.querySelector("#OnlineSales"), options);
 
                 chart1.render();
+            }
+
+            function loadtopDestinationSalesOnline(searchParamters) {
+
+                var topDestinationSalesOnline = $.parseJSON($.ajax({
+                    url:  '{{route('topDestinationSales','Online')}}',
+                    dataType: "json",
+                    data: searchParamters,
+                    async: false
+                }).responseText);
+
+                var linenames = [];
+                var tickets = [];
+
+                topDestinationSalesOnline.forEach(function (x) {
+                    linenames.push(x.linename);
+                    tickets.push(x.total);
+                });
+
+                var options = {
+
+                            series: [{
+                                name:'عدد التذاكر',
+                                data: tickets,
+                            }],
+
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    // borderRadius: 45,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                categories: linenames,
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '15px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            },
+
+                        };
+
+                createChartElementIfNotExist('topDestinationSalesOnline');
+
+                var chart = new ApexCharts(document.querySelector("#topDestinationSalesOnline"), options);
+
+                chart.render();
+            }
+
+            function loadtopDestinationSalesOffline(searchParamters) {
+
+                var topDestinationSalesOffline = $.parseJSON($.ajax({
+                    url:  '{{route('topDestinationSales','Offline')}}',
+                    dataType: "json",
+                    data: searchParamters,
+                    async: false
+                }).responseText);
+
+                var linenames = [];
+                var tickets = [];
+
+                topDestinationSalesOffline.forEach(function (x) {
+                    linenames.push(x.linename);
+                    tickets.push(x.total);
+                });
+
+                var options = {
+                            series: [{
+                                name:'عدد التذاكر',
+                                data: tickets
+                            }],
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 15,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                type: 'category',
+                                categories: linenames,
+
+
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    // show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '15px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            }
+                        };
+                createChartElementIfNotExist('topDestinationSalesOffline');
+
+                var chart1 = new ApexCharts(document.querySelector("#topDestinationSalesOffline"), options);
+
+                chart1.render();
+            }
+
+            function loadcollectedBalance(searchParamters) {
+
+                var collectedBalance = $.parseJSON($.ajax({
+                    url:  '{{route('collectedBalance')}}',
+                    dataType: "json",
+                    data: searchParamters,
+                    async: false
+                }).responseText);
+
+                var stations = [];
+                var totals = [];
+
+                collectedBalance.forEach(function (x) {
+                    stations.push(x.name);
+                    totals.push(x.total);
+                });
+
+                var options = {
+                            series: [{
+                                name:'الاجمالي',
+                                data: totals
+                            }],
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    // borderRadius: 15,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                type: 'category',
+                                categories: stations,
+
+
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    // show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '15px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            }
+                        };
+                createChartElementIfNotExist('collectedBalance');
+
+                var chart1 = new ApexCharts(document.querySelector("#collectedBalance"), options);
+
+                chart1.render();
+            }
+
+            function createChartElementIfNotExist(chartDivId) {
+
+                var parentId = "chart-"+chartDivId;
+
+                if (document.getElementById(parentId).children.length == 0) {
+                    dc = document.createElement("div");
+                    dc.id = chartDivId;
+                    document.getElementById(parentId).appendChild(dc);
+                }
             }
 
         </script>

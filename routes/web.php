@@ -22,13 +22,16 @@ Route::get('/reports', function () {
 });
 
 Route::get('/getInternetTickets', function () {
-
+    // dd(request()->all());
     $tics = DB::table('tickets_archive')
                     ->select('status', DB::raw('count(*) as total'))
                     ->where('bookingMethod','Online')
+                    ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
+                    // ->where('tickets_archive.organization_id','LIKE',request()->from)
+                    // ->where('organization_id','LIKE',request()->to)
+                    ->where('bookingMethod','Online')
                     ->groupBy('status')
                     ->get();
-
 
     $tics = $tics->map(function ($tic)  {
         return [
@@ -36,7 +39,7 @@ Route::get('/getInternetTickets', function () {
             'total'            => $tic->total
         ];
     });
-
+    // dd();
     return response()->json($tics);
 
 })->name('getInternetTickets');
@@ -44,16 +47,22 @@ Route::get('/getInternetTickets', function () {
 Route::get('/compLinesOnlineVsOffline', function () {
 
     $tics = DB::table('tickets_archive')
+                ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
                 ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
-                // ->select('organizations.name as types','tickets_archive.id')
-                // ->where('bookingMethod','Online')
-                // ->get()
-                ->groupBy('organizations.name')->toSql();
+                ->select('organizations.name as orgname','bookingMethod')
+                ->get()
+                ->groupBy(['orgname','bookingMethod']);
 
+    $results = [];
 
-     dd($tics);
+    foreach ($tics as $key => $value) {
+        $results[][$key]= [
+            'Offline' => (isset($value['Offline']))? count($value['Offline']) : 0,
+            'Online' => (isset($value['Online']))? count($value['Online']) : 0,
+        ];
 
-    return response()->json($tics);
+    }
+    return response()->json($results);
 
 })->name('compLinesOnlineVsOffline');
 
@@ -61,7 +70,7 @@ Route::get('/best-seller-station/{type}', function ($type) {
 
     $tics = DB::table('tickets_archive')
                 ->where('bookingMethod',$type)
-                // ->where('tickets_archive.organization_id',26)
+                ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
                 ->leftJoin('stations', 'stations.id', '=', 'tickets_archive.station')
                 // ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
                 ->select('stations.name',DB::raw('count(*) as total'))
@@ -80,7 +89,7 @@ Route::get('/best-seller-station/{type}', function ($type) {
 Route::get('/top-organizations-trips', function () {
 
     $tics = DB::table('trips')
-                // ->where('tickets_archive.organization_id',26)
+                ->where('organization_id','LIKE',request()->organization_id)
                 ->leftJoin('organizations', 'organizations.id', '=', 'trips.organization_id')
                 ->select('organizations.name',DB::raw('count(*) as total'))
                 ->groupBy('trips.organization_id')
@@ -95,7 +104,7 @@ Route::get('/top-organizations-trips', function () {
 Route::get('/best-organizations-stations', function () {
 
     $tics = DB::table('stations')
-                // ->where('tickets_archive.organization_id',26)
+                ->where('organization_id','LIKE',request()->organization_id)
                 ->leftJoin('organizations', 'organizations.id', '=', 'stations.organization_id')
                 ->select('organizations.name',DB::raw('count(*) as total'))
                 ->groupBy('stations.organization_id')
@@ -110,7 +119,7 @@ Route::get('/best-organizations-stations', function () {
 Route::get('/best-seller-ticket-types', function () {
 
     $tics = DB::table('tickets_archive')
-                // ->where('tickets_archive.organization_id',26)
+                ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
                 ->where('trips.id','!=',null)
                 ->leftJoin('trips', 'trips.id', '=', 'tickets_archive.trip_id')
                 ->leftJoin('trip_classes', 'trip_classes.id', '=', 'trips.trip_class')
@@ -127,7 +136,7 @@ Route::get('/best-seller-ticket-types', function () {
 Route::get('/tickets-reservation-methods', function () {
 
     $tics = DB::table('tickets_archive')
-                // ->where('tickets_archive.organization_id',26)
+                ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
                 ->leftJoin('access_list', 'access_list.id', '=', 'tickets_archive.access_id')
                 ->select('access_list.title',DB::raw('count(*) as total'))
                 ->groupBy('tickets_archive.access_id')
@@ -155,11 +164,11 @@ Route::get('/tickets-reservation-methods', function () {
 Route::get('/get-online-sales', function () {
 
     $tics = DB::table('tickets_archive')
-
+                ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
                 ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
                 ->where('bookingMethod','Online')
                 // ->where('tickets_archive.organization_id',26)
-                ->whereNotNull('access_id')
+                // ->whereNotNull('access_id')
                 ->select('organizations.name',DB::raw('sum(totalamount) as total'))
                 ->groupBy('tickets_archive.organization_id')
                 ->orderBy('total','desc')
@@ -173,10 +182,9 @@ Route::get('/get-online-sales', function () {
 Route::get('/get-offline-sales', function () {
 
     $tics = DB::table('tickets_archive')
-
+                ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
                 ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
                 ->where('bookingMethod','Offline')
-                // ->where('tickets_archive.organization_id',26)
                 ->whereNull('access_id')
                 ->select('organizations.name',DB::raw('sum(totalamount) as total'))
                 ->groupBy('tickets_archive.organization_id')
@@ -187,3 +195,37 @@ Route::get('/get-offline-sales', function () {
     return response()->json($tics);
 
 })->name('OfflineSales');
+
+Route::get('/top-destination-sales/{type}', function ($type) {
+
+    $tics = DB::table('tickets_archive')
+                ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
+                ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
+                ->leftJoin('cities as c1', 'c1.id', '=', 'tickets_archive.city_from')
+                ->leftJoin('cities as c2', 'c2.id', '=', 'tickets_archive.city_to')
+                ->where('bookingMethod',$type)
+                ->select(DB::raw('CONCAT(c1.city_name," - ",c2.city_name) as linename'),DB::raw('count(*) as total'))
+                ->groupBy('city_from','city_to')
+                ->orderBy('total','desc')
+                ->get()
+                ->take(10);
+
+    return response()->json($tics);
+
+})->name('topDestinationSales');
+
+Route::get('/get-collected-balance', function () {
+
+    $tics = DB::table('user_card_balance')
+                ->where('user_card_balance.organization_id','LIKE',request()->organization_id)
+                ->leftJoin('organizations', 'organizations.id', '=', 'user_card_balance.organization_id')
+                ->where('amount','>',0)
+                ->select('organizations.name',DB::raw('sum(amount) as total'))
+                ->groupBy('user_card_balance.organization_id')
+                ->orderBy('total','desc')
+                ->get()
+                ->take(10);
+
+    return response()->json($tics);
+
+})->name('collectedBalance');
