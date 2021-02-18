@@ -354,6 +354,25 @@
                         </div>
                 </div>
             </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title"> أعلى طرق الدفع استخداما </h3>
+
+                        </div>
+                        <div class="card-body">
+                          <div id="chart-mostUsedPaymentMethod"class='chart'>
+                            <div id="mostUsedPaymentMethod"  ></div>
+                          </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                
+            </div>
 
         </div>
 
@@ -424,6 +443,9 @@
                 
                 // عدد العملاء المسجلین
                 getRegisteredClients(searchParamters);
+
+                // أعلى طرق الدفع استخداما
+                mostUsedPaymentMethod(searchParamters);
             }
 
             function loadInternetTickets(searchParamters )  {
@@ -1431,6 +1453,80 @@
                 createChartElementIfNotExist('RegisteredClients');
 
                 var chart1 = new ApexCharts(document.querySelector("#RegisteredClients"), options);
+
+                chart1.render();
+            }
+            
+            function mostUsedPaymentMethod(searchParamters) {
+
+                var mostUsedPaymentMethod = $.parseJSON($.ajax({
+                    url:  '{{route('mostUsedPaymentMethod')}}',
+                    dataType: "json",
+                    data: searchParamters,
+                    async: false
+                }).responseText);
+
+                var stations = [];
+                var totals = [];
+
+                mostUsedPaymentMethod.forEach(function (x) {
+                    stations.push(x.type);
+                    totals.push(x.total);
+                });
+
+                var options = {
+                            series: [{
+                                name:'الاجمالي',
+                                data: totals
+                            }],
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    // borderRadius: 15,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                type: 'category',
+                                categories: stations,
+
+
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    // show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '15px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            }
+                        };
+                createChartElementIfNotExist('mostUsedPaymentMethod');
+
+                var chart1 = new ApexCharts(document.querySelector("#mostUsedPaymentMethod"), options);
 
                 chart1.render();
             }

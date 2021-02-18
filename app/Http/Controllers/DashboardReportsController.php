@@ -386,28 +386,61 @@ class DashboardReportsController extends Controller
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
 
-        // $lastSearch = $this->checkChartsArchive('mostUsedPaymentMethod',request()->organization_id,$from,$to);
+        $lastSearch = $this->checkChartsArchive('mostUsedPaymentMethod',request()->organization_id,$from,$to);
 
-        // if ($lastSearch) {
-        //     return response()->json( json_decode($lastSearch));
-        // }
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
+        
+        
+        // get cash and fawry paid tickets
+        $nonCreditTickets = DB::table('tickets_archive')
+                            ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
+                            ->where('tickets_archive.travelDate','>=',$from)
+                            ->where('tickets_archive.travelDate','<=',$to)
+                            ->where('credit',0)
+                            ->groupBy('bookingMethod')
+                            ->select(('bookingMethod'),DB::raw('count(*) as total'))
+                            ->get();
+                            
+        $creditTickets = DB::table('tickets_archive')
+                            ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
+                            ->where('tickets_archive.travelDate','>=',$from)
+                            ->where('tickets_archive.travelDate','<=',$to)
+                            ->where('credit',1)
+                            ->where('bookingMethod','Online')
 
-        $tics = DB::table('tickets_archive')
-                    ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
-                    ->where('tickets_archive.travelDate','>=',$from)
-                    ->where('tickets_archive.travelDate','<=',$to)
-                    ->leftJoin('user_card_balance', 'user_card_balance.ticket_ref_code', '=', 'tickets_archive.ref_code')
-                    ->leftJoin('user_card_type', 'user_card_balance.card_id', '=', 'user_card_type.id')
+                            ->leftJoin('user_card_balance', 'user_card_balance.ticket_ref_code', '=', 'tickets_archive.ref_code')
+                            ->leftJoin('user_card_type', 'user_card_balance.card_id', '=', 'user_card_type.id')
+                            // ->where('user_card_balance.card_id',36)
+                            ->groupBy('user_card_type.type')
+                            ->select(('user_card_type.name'),DB::raw('count(*) as total'))
+                            ->get();
                     
-                    ->select(('user_card_type.name'),DB::raw('count(*) as total'))
-                    ->groupBy('user_card_balance.card_id','city_to')
-                    ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                            // dd($creditTickets);
 
-        // $this->saveChartsArchive('mostUsedPaymentMethod',request()->organization_id,$from,$to,$tics);
 
-        return response()->json($tics);
+        $results[] = [
+            'type'  => 'كاش',
+            'total' => $nonCreditTickets->where('bookingMethod','Offline')->first()->total,
+        ];
+        $results[] = [
+            'type'  => 'فيزا',
+            'total' => $nonCreditTickets->where('bookingMethod','Online')->first()->total,
+        ];
+        
+        foreach ($creditTickets as $key => $user_card_type) {
+
+            $results[] =[
+                'type' => $user_card_type->name,
+                'total' => $user_card_type->total,
+            ];
+        }
+        
+
+        $this->saveChartsArchive('mostUsedPaymentMethod',request()->organization_id,$from,$to,$results);
+
+        return response()->json($results);
 
     }
 
