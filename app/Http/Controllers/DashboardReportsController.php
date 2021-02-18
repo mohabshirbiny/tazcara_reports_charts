@@ -15,7 +15,7 @@ class DashboardReportsController extends Controller
         $lastSearch = $this->checkChartsArchive('getInternetTickets',request()->organization_id,$from,$to);
 
         if ($lastSearch) {
-            return response()->json( unserialize($lastSearch));
+            return response()->json( json_decode($lastSearch));
         }
 
         $tics = DB::table('tickets_archive')
@@ -44,6 +44,12 @@ class DashboardReportsController extends Controller
 
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
+        
+        $lastSearch = $this->checkChartsArchive('compLinesOnlineVsOffline',request()->organization_id,$from,$to);
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('tickets_archive')
                     ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
@@ -63,12 +69,21 @@ class DashboardReportsController extends Controller
             ];
 
         }
+        
+        $this->saveChartsArchive('compLinesOnlineVsOffline',request()->organization_id,$from,$to,$results);
+
         return response()->json($results);
     }
 
     public function stationBestSeller($type){
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
+
+        $lastSearch = $this->checkChartsArchive('stationBestSeller',request()->organization_id,$from,$to);
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('tickets_archive')
                     ->where('bookingMethod',$type)
@@ -86,10 +101,19 @@ class DashboardReportsController extends Controller
 
         //  dd($tics);
 
+        $this->saveChartsArchive('stationBestSeller',request()->organization_id,$from,$to,$tics);
+
         return response()->json($tics);
     }
 
     public function topOrganizationsTrips(){
+
+        $lastSearch = $this->checkChartsArchive('topOrganizationsTrips',request()->organization_id,'','');
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
+
         $tics = DB::table('trips')
                 ->where('organization_id','LIKE',request()->organization_id)
                 ->leftJoin('organizations', 'organizations.id', '=', 'trips.organization_id')
@@ -98,11 +122,20 @@ class DashboardReportsController extends Controller
                 ->orderBy('total','desc')
                 ->get()
                 ->take(10);
+               
+        $this->saveChartsArchive('topOrganizationsTrips',request()->organization_id,'','',$tics);
 
         return response()->json($tics);
     }
 
     public function topOrganizationsStations(){
+
+        $lastSearch = $this->checkChartsArchive('topOrganizationsStations',request()->organization_id,'','');
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
+
         $tics = DB::table('stations')
                 ->where('organization_id','LIKE',request()->organization_id)
                 ->leftJoin('organizations', 'organizations.id', '=', 'stations.organization_id')
@@ -112,6 +145,8 @@ class DashboardReportsController extends Controller
                 ->get()
                 ->take(10);
 
+        $this->saveChartsArchive('topOrganizationsStations',request()->organization_id,'','',$tics);
+
         return response()->json($tics);
     }
 
@@ -119,6 +154,12 @@ class DashboardReportsController extends Controller
 
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
+
+        $lastSearch = $this->checkChartsArchive('BestSellerTicketTypes',request()->organization_id,$from,$to);
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('tickets_archive')
                     ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
@@ -133,6 +174,9 @@ class DashboardReportsController extends Controller
                     ->get()
                     ->take(10);
 
+
+        $this->saveChartsArchive('BestSellerTicketTypes',request()->organization_id,$from,$to,$tics);
+
         return response()->json($tics);
     }
 
@@ -140,6 +184,12 @@ class DashboardReportsController extends Controller
 
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
+
+        $lastSearch = $this->checkChartsArchive('ticketsReservationMethods',request()->organization_id,$from,$to);
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('tickets_archive')
                     ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
@@ -151,20 +201,24 @@ class DashboardReportsController extends Controller
                     ->orderBy('total','desc')
                     ->get()
                     ->take(10);
-                    $tics = $tics->map(function($method)
-                    {
-                        if (is_null($method->title) ) {
-                            return [
-                                'title' => 'موقع تذكرة',
-                                'total' => $method->total
-                            ];
-                        }else{
-                            return [
-                                'title' => $method->title,
-                                'total' => $method->total
-                            ];
-                        }
-                    });
+        
+        $tics = $tics->map(function($method)
+            {
+                if (is_null($method->title) ) {
+                    return [
+                        'title' => 'موقع تذكرة',
+                        'total' => $method->total
+                    ];
+                }else{
+                    return [
+                        'title' => $method->title,
+                        'total' => $method->total
+                    ];
+                }
+            });
+
+            $this->saveChartsArchive('ticketsReservationMethods',request()->organization_id,$from,$to,$tics);
+
         return response()->json($tics);
     }
 
@@ -172,6 +226,12 @@ class DashboardReportsController extends Controller
 
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
+
+        $lastSearch = $this->checkChartsArchive('OnlineSales',request()->organization_id,$from,$to);
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('tickets_archive')
                     ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
@@ -187,6 +247,8 @@ class DashboardReportsController extends Controller
                     ->get()
                     ->take(10);
 
+        $this->saveChartsArchive('OnlineSales',request()->organization_id,$from,$to,$tics);
+                
         return response()->json($tics);
 
     }
@@ -195,6 +257,12 @@ class DashboardReportsController extends Controller
 
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
+
+        $lastSearch = $this->checkChartsArchive('OfflineSales',request()->organization_id,$from,$to);
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('tickets_archive')
                     ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
@@ -209,6 +277,8 @@ class DashboardReportsController extends Controller
                     ->get()
                     ->take(10);
 
+        $this->saveChartsArchive('OfflineSales',request()->organization_id,$from,$to,$tics);
+
         return response()->json($tics);
 
     }
@@ -217,6 +287,12 @@ class DashboardReportsController extends Controller
 
         $from = (request()->from)? request()->from : '2000-01-01';
         $to = (request()->to)? request()->to : date("Y-m-d");
+
+        $lastSearch = $this->checkChartsArchive('topDestinationSales',request()->organization_id,$from,$to);
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('tickets_archive')
                     ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
@@ -232,11 +308,19 @@ class DashboardReportsController extends Controller
                     ->get()
                     ->take(10);
 
+        $this->saveChartsArchive('topDestinationSales',request()->organization_id,$from,$to,$tics);
+
         return response()->json($tics);
 
     }
 
     public function collectedBalance(){
+
+        $lastSearch = $this->checkChartsArchive('collectedBalance',request()->organization_id,'','');
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
 
         $tics = DB::table('user_card_balance')
                     ->where('user_card_balance.organization_id','LIKE',request()->organization_id)
@@ -248,9 +332,86 @@ class DashboardReportsController extends Controller
                     ->get()
                     ->take(10);
 
+        $this->saveChartsArchive('collectedBalance',request()->organization_id,'','',$tics);
+
         return response()->json($tics);
 
     }
+
+    public function getRegisteredClients(){
+
+                    
+        $lastSearch = $this->checkChartsArchive('getRegisteredClients',request()->organization_id,'','');
+
+        if ($lastSearch) {
+            return response()->json( json_decode($lastSearch));
+        }
+
+        $registeredUsers = DB::table('users')
+                            // ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
+                            ->where('type','!=','Employee')
+                            ->count();   
+                            
+        $onlineUsers = DB::table('tickets_archive')
+                            ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
+                            ->where('credit','=',1)
+                            ->count();        
+                        
+        $offlineUsers = DB::table('offline_user')
+                        ->where('offline_user.organization_id','LIKE',request()->organization_id)
+                        ->count();
+
+        $results[] = [
+            'type'  => 'مسجل',
+            'total' => $registeredUsers,
+        ];
+        $results[] = [
+            'type'  => 'من المحطة',
+            'total' => $offlineUsers,
+        ];
+        
+        $results[] = [
+            'type'  => 'اونلاين',
+            'total' => $onlineUsers,
+        ];
+
+        $this->saveChartsArchive('getRegisteredClients',request()->organization_id,'','',$results);
+
+        return response()->json($results);
+
+    }
+
+    public function mostUsedPaymentMethod(){
+
+        $from = (request()->from)? request()->from : '2000-01-01';
+        $to = (request()->to)? request()->to : date("Y-m-d");
+
+        // $lastSearch = $this->checkChartsArchive('mostUsedPaymentMethod',request()->organization_id,$from,$to);
+
+        // if ($lastSearch) {
+        //     return response()->json( json_decode($lastSearch));
+        // }
+
+        $tics = DB::table('tickets_archive')
+                    ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
+                    ->where('tickets_archive.travelDate','>=',$from)
+                    ->where('tickets_archive.travelDate','<=',$to)
+                    ->leftJoin('user_card_balance', 'user_card_balance.ticket_ref_code', '=', 'tickets_archive.ref_code')
+                    ->leftJoin('user_card_type', 'user_card_balance.card_id', '=', 'user_card_type.id')
+                    
+                    ->select(('user_card_type.name'),DB::raw('count(*) as total'))
+                    ->groupBy('user_card_balance.card_id','city_to')
+                    ->orderBy('total','desc')
+                    ->get()
+                    ->take(10);
+
+        // $this->saveChartsArchive('mostUsedPaymentMethod',request()->organization_id,$from,$to,$tics);
+
+        return response()->json($tics);
+
+    }
+
+    ////////////
 
     public function checkChartsArchive($chart_type,$organization_id,$date_from,$date_to){
         $archivedChartResult = DB::table('charts_archive')
@@ -273,7 +434,7 @@ class DashboardReportsController extends Controller
             'organization_id' => $organization_id,
             'date_from' => $date_from,
             'date_to' => $date_to,
-            'result' => serialize($result),
+            'result' => json_encode($result),
         ]);
     }
 }

@@ -42,3 +42,7 @@ Route::get('/get-offline-sales', 'DashboardReportsController@OfflineSales')->nam
 Route::get('/top-destination-sales/{type}', 'DashboardReportsController@topDestinationSales')->name('topDestinationSales');
 
 Route::get('/get-collected-balance', 'DashboardReportsController@collectedBalance')->name('collectedBalance');
+
+Route::get('/get-registered-clients', 'DashboardReportsController@getRegisteredClients')->name('getRegisteredClients');
+
+Route::get('/get-most-used-paymentMethod', 'DashboardReportsController@mostUsedPaymentMethod')->name('mostUsedPaymentMethod');

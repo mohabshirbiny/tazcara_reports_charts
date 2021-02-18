@@ -324,19 +324,19 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    {{-- <div class="card card-primary">
+                    <div class="card card-primary">
                         <div class="card-header">
-                          <h3 class="card-title"> xxxxxأعلى 10 خطوط مبيعا اونلاين </h3>
+                          <h3 class="card-title"> عدد العملاء المسجلین </h3>
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-topDestixnationSalesOnline"class='chart'>
-                            <div id="topDestinatixonSalesOnline"  ></div>
+                          <div id="chart-RegisteredClients"class='chart'>
+                            <div id="RegisteredClients"  ></div>
                           </div>
 
                         </div>
                         <!-- /.card-body -->
-                      </div> --}}
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="card card-primary">
@@ -421,6 +421,9 @@
 
                 // أرصدة كروت الشحن المحصلة
                 loadcollectedBalance(searchParamters);
+                
+                // عدد العملاء المسجلین
+                getRegisteredClients(searchParamters);
             }
 
             function loadInternetTickets(searchParamters )  {
@@ -1357,7 +1360,83 @@
 
                 chart1.render();
             }
+            
+            function getRegisteredClients(searchParamters) {
 
+                var RegisteredClients = $.parseJSON($.ajax({
+                    url:  '{{route('getRegisteredClients')}}',
+                    dataType: "json",
+                    data: searchParamters,
+                    async: false
+                }).responseText);
+
+                var stations = [];
+                var totals = [];
+
+                RegisteredClients.forEach(function (x) {
+                    stations.push(x.type);
+                    totals.push(x.total);
+                });
+
+                var options = {
+                            series: [{
+                                name:'الاجمالي',
+                                data: totals
+                            }],
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+
+                            plotOptions: {
+                                bar: {
+                                    // borderRadius: 15,
+                                    horizontal: true,
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                            xaxis: {
+                                type: 'category',
+                                categories: stations,
+
+
+                            },
+                            grid: {
+                                xaxis: {
+                                    lines: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                reversed: true,
+                                axisTicks: {
+                                    // show: true
+                                },
+                                labels: {
+                                    show: true,
+                                    style: {
+                                        colors: [],
+                                        fontSize: '15px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        cssClass: 'apexcharts-xaxis-label',
+                                    },
+
+                                },
+                            }
+                        };
+                createChartElementIfNotExist('RegisteredClients');
+
+                var chart1 = new ApexCharts(document.querySelector("#RegisteredClients"), options);
+
+                chart1.render();
+            }
+
+
+            /**************************************************************** */
             function createChartElementIfNotExist(chartDivId) {
 
                 var parentId = "chart-"+chartDivId;
