@@ -27,9 +27,7 @@ class DashboardReportsController extends Controller
                         ->where('bookingMethod','Online')
                         ->groupBy('status')
                         ->get();
-        
-        $tics = collect($tics);
-        
+                        $tics = collect($tics);
         $tics = $tics->map(function ($tic)  {
             return [
                 'type'            => $tic->status,
@@ -61,11 +59,11 @@ class DashboardReportsController extends Controller
                     ->select('organizations.name as orgname','bookingMethod')
                     ->get();
 
-        $results = [];
-        
-        $tics = collect($tics)->groupBy('orgname');
-        
-        $tics = $tics->map(function($q){
+                    $results = [];
+
+                    $tics = collect($tics)->groupBy('orgname');
+
+                    $tics = $tics->map(function($q){
             return $q->groupBy('bookingMethod');
         });
 
@@ -102,8 +100,8 @@ class DashboardReportsController extends Controller
                     ->select('stations.name',DB::raw('count(*) as total'))
                     ->groupBy('tickets_archive.station')
                     ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                    
+                    ->take(10)->get();
                     // ->toArray();
 
         //  dd($tics);
@@ -127,8 +125,8 @@ class DashboardReportsController extends Controller
                 ->select('organizations.name',DB::raw('count(*) as total'))
                 ->groupBy('trips.organization_id')
                 ->orderBy('total','desc')
-                ->get()
-                ->take(10);
+                
+                ->take(10)->get();
                
         $this->saveChartsArchive('topOrganizationsTrips',request()->organization_id,'','',$tics);
 
@@ -149,8 +147,8 @@ class DashboardReportsController extends Controller
                 ->select('organizations.name',DB::raw('count(*) as total'))
                 ->groupBy('stations.organization_id')
                 ->orderBy('total','desc')
-                ->get()
-                ->take(10);
+                
+                ->take(10)->get();
 
         $this->saveChartsArchive('topOrganizationsStations',request()->organization_id,'','',$tics);
 
@@ -178,9 +176,8 @@ class DashboardReportsController extends Controller
                     ->select('trip_classes.name',DB::raw('count(*) as total'))
                     ->groupBy('trips.trip_class')
                     ->orderBy('total','desc')
-                    ->take(10)
-                    ->get();
-
+                    
+                    ->take(10)->get();
 
         $this->saveChartsArchive('BestSellerTicketTypes',request()->organization_id,$from,$to,$tics);
 
@@ -206,8 +203,8 @@ class DashboardReportsController extends Controller
                     ->select('access_list.title',DB::raw('count(*) as total'))
                     ->groupBy('tickets_archive.access_id')
                     ->orderBy('total','desc')
-                    ->take(10)
-                    ->get();
+                    
+                    ->take(10)->get();
         
         $tics = collect($tics);
 
@@ -253,8 +250,8 @@ class DashboardReportsController extends Controller
                     ->select('organizations.name',DB::raw('sum(totalamount) as total'))
                     ->groupBy('tickets_archive.organization_id')
                     ->orderBy('total','desc')
-                    ->take(10)
-                    ->get();
+                    
+                    ->take(10)->get();
 
         $this->saveChartsArchive('OnlineSales',request()->organization_id,$from,$to,$tics);
                 
@@ -283,8 +280,8 @@ class DashboardReportsController extends Controller
                     ->select('organizations.name',DB::raw('sum(totalamount) as total'))
                     ->groupBy('tickets_archive.organization_id')
                     ->orderBy('total','desc')
-                    ->take(10)
-                    ->get();
+                    
+                    ->take(10)->get();
 
         $this->saveChartsArchive('OfflineSales',request()->organization_id,$from,$to,$tics);
 
@@ -314,8 +311,8 @@ class DashboardReportsController extends Controller
                     ->select(DB::raw('CONCAT(c1.city_name," - ",c2.city_name) as linename'),DB::raw('count(*) as total'))
                     ->groupBy('city_from','city_to')
                     ->orderBy('total','desc')
-                    ->take(10)
-                    ->get();
+                    
+                    ->take(10)->get();
 
         $this->saveChartsArchive('topDestinationSales',request()->organization_id,$from,$to,$tics);
 
@@ -338,8 +335,8 @@ class DashboardReportsController extends Controller
                     ->select('organizations.name',DB::raw('sum(amount) as total'))
                     ->groupBy('user_card_balance.organization_id')
                     ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                    
+                    ->take(10)->get();
 
         $this->saveChartsArchive('collectedBalance',request()->organization_id,'','',$tics);
 
