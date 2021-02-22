@@ -27,7 +27,9 @@ class DashboardReportsController extends Controller
                         ->where('bookingMethod','Online')
                         ->groupBy('status')
                         ->get();
-
+        
+        $tics = collect($tics);
+        
         $tics = $tics->map(function ($tic)  {
             return [
                 'type'            => $tic->status,
@@ -50,17 +52,22 @@ class DashboardReportsController extends Controller
         if ($lastSearch) {
             return response()->json( json_decode($lastSearch));
         }
-
+        
         $tics = DB::table('tickets_archive')
                     ->where('tickets_archive.organization_id','LIKE',request()->organization_id)
                     ->where('tickets_archive.travelDate','>=',$from)
                     ->where('tickets_archive.travelDate','<=',$to)
                     ->leftJoin('organizations', 'organizations.id', '=', 'tickets_archive.organization_id')
                     ->select('organizations.name as orgname','bookingMethod')
-                    ->get()
-                    ->groupBy(['orgname','bookingMethod']);
+                    ->get();
 
         $results = [];
+        
+        $tics = collect($tics)->groupBy('orgname');
+        
+        $tics = $tics->map(function($q){
+            return $q->groupBy('bookingMethod');
+        });
 
         foreach ($tics as $key => $value) {
             $results[][$key]= [
@@ -171,8 +178,8 @@ class DashboardReportsController extends Controller
                     ->select('trip_classes.name',DB::raw('count(*) as total'))
                     ->groupBy('trips.trip_class')
                     ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                    ->take(10)
+                    ->get();
 
 
         $this->saveChartsArchive('BestSellerTicketTypes',request()->organization_id,$from,$to,$tics);
@@ -199,9 +206,11 @@ class DashboardReportsController extends Controller
                     ->select('access_list.title',DB::raw('count(*) as total'))
                     ->groupBy('tickets_archive.access_id')
                     ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                    ->take(10)
+                    ->get();
         
+        $tics = collect($tics);
+
         $tics = $tics->map(function($method)
             {
                 if (is_null($method->title) ) {
@@ -244,8 +253,8 @@ class DashboardReportsController extends Controller
                     ->select('organizations.name',DB::raw('sum(totalamount) as total'))
                     ->groupBy('tickets_archive.organization_id')
                     ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                    ->take(10)
+                    ->get();
 
         $this->saveChartsArchive('OnlineSales',request()->organization_id,$from,$to,$tics);
                 
@@ -274,8 +283,8 @@ class DashboardReportsController extends Controller
                     ->select('organizations.name',DB::raw('sum(totalamount) as total'))
                     ->groupBy('tickets_archive.organization_id')
                     ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                    ->take(10)
+                    ->get();
 
         $this->saveChartsArchive('OfflineSales',request()->organization_id,$from,$to,$tics);
 
@@ -305,8 +314,8 @@ class DashboardReportsController extends Controller
                     ->select(DB::raw('CONCAT(c1.city_name," - ",c2.city_name) as linename'),DB::raw('count(*) as total'))
                     ->groupBy('city_from','city_to')
                     ->orderBy('total','desc')
-                    ->get()
-                    ->take(10);
+                    ->take(10)
+                    ->get();
 
         $this->saveChartsArchive('topDestinationSales',request()->organization_id,$from,$to,$tics);
 
@@ -419,7 +428,8 @@ class DashboardReportsController extends Controller
                     
                             // dd($creditTickets);
 
-
+        $nonCreditTickets = collect($nonCreditTickets);
+        $creditTickets = collect($creditTickets);
         $results[] = [
             'type'  => 'كاش',
             'total' => $nonCreditTickets->where('bookingMethod','Offline')->first()->total,
