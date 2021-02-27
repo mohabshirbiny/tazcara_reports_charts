@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Styles -->
         <style>
             html, body {
@@ -82,13 +82,13 @@
                                   <div class="col">
                                     <label for="">اسم الشركة</label>
                                   </div>
-                                  <div class="col">
-                                    <label for="">من تاريخ</label>
-                                  </div>
+
                                   <div class="col">
                                     <label for="">الى تاريخ</label>
                                   </div>
-
+<div class="col">
+                                    <label for="">من تاريخ</label>
+                                  </div>
                                 </div>
                                 <div class="row">
                                     <div class="col" style="text-align: center;">
@@ -99,17 +99,30 @@
                                             @endforeach
                                         </select>
                                     </div>
+
                                     <div class="col">
-                                        <input type="date" class="form-control" name="from">
+                                        <input type="text" readonly class="form-control" id="date_to" name="to">
+                                    </div><div class="col">
+                                        <input type="text" readonly class="form-control" id="date_from" name="from">
                                     </div>
                                     <div class="col">
-                                        <input type="date" class="form-control" name="to">
+                                        <div id="reportrange" class="btn" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                            اختر الفترة  <i class="fa fa-calendar"></i>&nbsp;
+                                            <span></span> <i class="fa fa-caret-down"></i>
+                                        </div>
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col" style="text-align: center;">
-                                        <button class="btn btn-success mb-2" type="submit">تحديث</button>
+                                        <button class="btn btn-success mb-2" id="enbled-update-button" type="submit" style="width: 200px;" >
+                                            <span >تحديث</span>
+                                        </button>
+
+                                        <button class="btn btn-success mb-2" id="disabled-update-button" type="submit" style="width: 200px;display: none" disabled>
+                                            <span  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            <span > ... جاري تحديث البيانات </span>
+                                        </button>
                                     </div>
                                 </div>
                               </form>
@@ -132,7 +145,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-internetTickets" class='chart'>
+                          <div id="chart-internetTickets"  class='chart'>
                             <div id="internetTickets" ></div>
                           </div>
 
@@ -147,7 +160,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div id="chart-compLinesOnlineVsOffline" class='chart'>
+                            <div id="chart-compLinesOnlineVsOffline"  class='chart'>
                               <div id="compLinesOnlineVsOffline" ></div>
                             </div>
 
@@ -165,7 +178,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-bestSellerStationOnline"class='chart'>
+                          <div id="chart-bestSellerStationOnline" class='chart'>
                             <div id="bestSellerStationOnline"  ></div>
                           </div>
 
@@ -180,7 +193,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div id="chart-bestSellerStationOffline"class='chart'>
+                            <div id="chart-bestSellerStationOffline" class='chart'>
                               <div id="bestSellerStationOffline" ></div>
                             </div>
 
@@ -198,7 +211,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-topOrganizationsTrips"class='chart'>
+                          <div id="chart-topOrganizationsTrips" class='chart'>
                             <div id="topOrganizationsTrips"  ></div>
                           </div>
 
@@ -213,7 +226,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div id="chart-topOrganizationsStations"class='chart'>
+                            <div id="chart-topOrganizationsStations" class='chart'>
                               <div id="topOrganizationsStations" ></div>
                             </div>
 
@@ -231,7 +244,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-BestSellerTicketTypes"class='chart'>
+                          <div id="chart-BestSellerTicketTypes" class='chart'>
                             <div id="BestSellerTicketTypes"  ></div>
                           </div>
 
@@ -246,7 +259,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div id="chart-ticketsReservationMethods"class='chart'>
+                            <div id="chart-ticketsReservationMethods" class='chart'>
                               <div id="ticketsReservationMethods" ></div>
                             </div>
 
@@ -264,7 +277,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-OfflineSales"class='chart'>
+                          <div id="chart-OfflineSales" class='chart'>
                             <div id="OfflineSales"  ></div>
                           </div>
 
@@ -279,7 +292,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div id="chart-OnlineSales"class='chart'>
+                            <div id="chart-OnlineSales" class='chart'>
                               <div id="OnlineSales" ></div>
                             </div>
 
@@ -297,7 +310,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-topDestinationSalesOnline"class='chart'>
+                          <div id="chart-topDestinationSalesOnline" class='chart'>
                             <div id="topDestinationSalesOnline"  ></div>
                           </div>
 
@@ -312,7 +325,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div id="chart-topDestinationSalesOffline"class='chart'>
+                            <div id="chart-topDestinationSalesOffline" class='chart'>
                               <div id="topDestinationSalesOffline" ></div>
                             </div>
 
@@ -330,7 +343,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-RegisteredClients"class='chart'>
+                          <div id="chart-RegisteredClients"  class='chart'>
                             <div id="RegisteredClients"  ></div>
                           </div>
 
@@ -345,7 +358,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div id="chart-collectedBalance"class='chart'>
+                            <div id="chart-collectedBalance"  class='chart'>
                               <div id="collectedBalance" ></div>
                             </div>
 
@@ -354,7 +367,7 @@
                         </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="card card-primary">
@@ -363,7 +376,7 @@
 
                         </div>
                         <div class="card-body">
-                          <div id="chart-mostUsedPaymentMethod"class='chart'>
+                          <div id="chart-mostUsedPaymentMethod"  class='chart'>
                             <div id="mostUsedPaymentMethod"  ></div>
                           </div>
 
@@ -371,7 +384,7 @@
                         <!-- /.card-body -->
                     </div>
                 </div>
-                
+
             </div>
 
         </div>
@@ -381,12 +394,48 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-        <script>
-            $(document).ready(function(){
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+        <script type="text/javascript">
+        $(document).ready(function(){
 
                 $('.select2').select2();
 
-                loadAllCharts();
+                var start = moment();
+                var end = moment();
+
+                document.getElementById("date_from").value = start.format('YYYY-MM-D').toString();
+                document.getElementById("date_to").value = end.format('YYYY-MM-D').toString();
+
+
+                function updateDates(start, end) {
+                    document.getElementById("date_from").value = start.format('YYYY-MM-D').toString();
+                    document.getElementById("date_to").value = end.format('YYYY-MM-D').toString();
+                }
+
+                $('#reportrange').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                    'اليوم': [moment(), moment()],
+                    'الأمس': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'آخر 7 أيام': [moment().subtract(6, 'days'), moment()],
+                    'آخر 30 يوم': [moment().subtract(29, 'days'), moment()],
+                    'هذا الشهر': [moment().startOf('month'), moment().endOf('month')],
+                    'الشهر الماضي': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    'آخر 6 شهور': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month')],
+                    'آخر سنة': [moment().subtract(1, 'year').startOf('month'), moment().endOf('month')]
+                    }
+                }, updateDates);
+
+                updateDates(start, end);
+
+                var searchParamters = $('form').serialize();
+
+                loadAllCharts(searchParamters);
 
             })
 
@@ -403,6 +452,9 @@
             });
 
             function loadAllCharts(searchParamters) {
+
+                document.getElementById("disabled-update-button").style.display = "inline";
+                document.getElementById("enbled-update-button").style.display = "none";
 
                 // Online Vs. Offline خطوط شرکات النقل
                 loadcompLinesOnlineVsOffline(searchParamters);
@@ -440,12 +492,15 @@
 
                 // أرصدة كروت الشحن المحصلة
                 loadcollectedBalance(searchParamters);
-                
+
                 // عدد العملاء المسجلین
                 getRegisteredClients(searchParamters);
 
                 // أعلى طرق الدفع استخداما
                 mostUsedPaymentMethod(searchParamters);
+
+                document.getElementById("disabled-update-button").style.display = "none";
+                document.getElementById("enbled-update-button").style.display = "inline";
             }
 
             function loadInternetTickets(searchParamters )  {
@@ -1382,7 +1437,7 @@
 
                 chart1.render();
             }
-            
+
             function getRegisteredClients(searchParamters) {
 
                 var RegisteredClients = $.parseJSON($.ajax({
@@ -1456,7 +1511,7 @@
 
                 chart1.render();
             }
-            
+
             function mostUsedPaymentMethod(searchParamters) {
 
                 var mostUsedPaymentMethod = $.parseJSON($.ajax({
